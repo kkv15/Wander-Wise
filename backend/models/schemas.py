@@ -91,6 +91,9 @@ class HotelsResponse(BaseModel):
     count: int
     city_links: Dict[str, str] = {}
     note: Optional[str] = None
+    hotels_by_city: Optional[Dict[str, List[Hotel]]] = None  # Grouped by city for frontend display
+    hotels_by_day: Optional[Dict[int, List[Hotel]]] = None  # Grouped by day for frontend display
+    cities_mentioned: Optional[List[str]] = None  # List of cities for which hotels were fetched
 
 class PlanTripResponse(BaseModel):
     itineraryId: Optional[str] = None

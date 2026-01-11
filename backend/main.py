@@ -576,13 +576,14 @@ async def plan_trip(req: PlanTripRequest, authorization: Optional[str] = Header(
         user_id = current["id"] if (current and isinstance(repo, MongoRepository)) else None
         
         try:
-            # Save with proper structure (hotels as list for storage compatibility)
+            # Save with full structured hotels object (preserves hotels_by_city and hotels_by_day)
             save_dict = response.model_dump()
-            save_dict["hotels"] = hotels  # Save as list for backward compatibility
+            # Keep the structured hotels object - it already contains the hotels list inside it
+            # This preserves hotels_by_city and hotels_by_day for display in history
             itinerary_id = repo.save_itinerary(save_dict, user_id=user_id)
         except TypeError:
             save_dict = response.model_dump()
-            save_dict["hotels"] = hotels  # Save as list for backward compatibility
+            # Keep the structured hotels object
             itinerary_id = repo.save_itinerary(save_dict)
         
         response.itineraryId = itinerary_id
