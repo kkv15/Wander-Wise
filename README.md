@@ -204,7 +204,6 @@ Response (abridged):
 ---
 
 ### 9) Next Steps
-- Add authentication (e.g., Clerk, Supabase Auth) if you want user accounts and history.
 - Replace flight cost heuristic with a real flights API when available.
 - Add map visualizations on the frontend using Leaflet (free) with OSM tiles.
 
