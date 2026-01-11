@@ -631,7 +631,8 @@ export default function ItineraryView({ data }) {
           </div>
           <div className="grid grid-2" style={{ gap: 20 }}>
             {(data.dailyPlan || []).map(d => {
-              const dayHotels = data.hotels?.hotels_by_day?.[d.day] || []
+              // Handle both integer and string keys (MongoDB stores keys as strings)
+              const dayHotels = data.hotels?.hotels_by_day?.[d.day] || data.hotels?.hotels_by_day?.[String(d.day)] || []
               return (
                 <div key={d.day} className="day-card">
                   <div style={{

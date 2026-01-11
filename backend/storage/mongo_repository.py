@@ -39,6 +39,8 @@ class MongoRepository:
     # ---- Itineraries ----
     def save_itinerary(self, itinerary: Dict[str, Any], user_id: Optional[str] = None) -> str:
         doc = dict(itinerary)
+        # Convert integer keys to strings for MongoDB compatibility
+        doc = self._convert_keys_to_strings(doc)
         doc["createdAt"] = datetime.utcnow()
         if user_id:
             try:
@@ -47,6 +49,21 @@ class MongoRepository:
                 doc["userId"] = user_id
         res = self.db.itineraries.insert_one(doc)
         return str(res.inserted_id)
+    
+    @staticmethod
+    def _convert_keys_to_strings(obj: Any) -> Any:
+        """
+        Recursively convert integer keys to strings for MongoDB compatibility.
+        MongoDB requires all dictionary keys to be strings.
+        """
+        if isinstance(obj, dict):
+            return {str(k): MongoRepository._convert_keys_to_strings(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [MongoRepository._convert_keys_to_strings(item) for item in obj]
+        elif isinstance(obj, tuple):
+            return tuple(MongoRepository._convert_keys_to_strings(item) for item in obj)
+        else:
+            return obj
 
     def list_itineraries_for_user(self, user_id: str, limit: int = 20) -> List[Dict[str, Any]]:
         try:
