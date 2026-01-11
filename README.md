@@ -7,19 +7,18 @@ This full-stack application:
 - Suggests hotels and attractions using free providers (OpenStreetMap stack)
 - Estimates costs (flights, hotels, daily spend) heuristically
 - Saves itineraries with user authentication support
-- Works entirely on free-tier APIs (no credit card required)
+- Works entirely on free-tier APIs 
 
 Backend: Python (FastAPI)  
 Frontend: React (Vite)  
-Database: SQLite (local file) or MongoDB Atlas (M0 free tier)  
-AI: Groq API (free tier; no card)  
+Database: MongoDB Atlas (M0 free tier)  
+AI: Groq API (free tier)  
 Maps/Places: 
 - Geocoding: Nominatim (OpenStreetMap)
-- Attractions: OpenTripMap (free API key, no card)
+- Attractions: OpenTripMap (free API key)
 - Hotels: OSM via Overpass API (free, rate limited)
 
-Important note about flight data:
-- There is no free public flight-pricing API without signup/card. This app estimates flight costs using distance-based heuristics and nearby airports from OSM data. You can later integrate a third-party flights API for live prices.
+
 
 ---
 
