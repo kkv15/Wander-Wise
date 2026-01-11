@@ -1,0 +1,204 @@
+# WanderWise - AI-Powered Travel Planning Platform
+
+**WanderWise** is an AI-powered travel planning platform that generates personalized day-by-day itineraries with hotel recommendations, attraction suggestions, and budget estimates for any destination.
+
+This full-stack application:
+- Generates detailed, elaborative day-by-day itineraries using AI (Groq)
+- Suggests hotels and attractions using free providers (OpenStreetMap stack)
+- Estimates costs (flights, hotels, daily spend) heuristically
+- Saves itineraries with user authentication support
+- Works entirely on free-tier APIs (no credit card required)
+
+Backend: Python (FastAPI)  
+Frontend: React (Vite)  
+Database: SQLite (local file) or MongoDB Atlas (M0 free tier)  
+AI: Groq API (free tier; no card)  
+Maps/Places: 
+- Geocoding: Nominatim (OpenStreetMap)
+- Attractions: OpenTripMap (free API key, no card)
+- Hotels: OSM via Overpass API (free, rate limited)
+
+Important note about flight data:
+- There is no free public flight-pricing API without signup/card. This app estimates flight costs using distance-based heuristics and nearby airports from OSM data. You can later integrate a third-party flights API for live prices.
+
+---
+
+### 1) Free Provider Setup (No Card Required)
+
+1. OpenTripMap API key: create a free account and copy the API key.
+2. Nominatim: no key; add your email to requests for politeness and to comply with usage policy.
+3. Groq API key: create a free account and copy the API key (no card).
+4. SQLite: no setup; a local file will be created automatically.
+
+---
+
+### 2) Backend Setup (FastAPI)
+
+Requirements: Python 3.10+
+
+1. Copy `backend/.env.example` to `backend/.env` and fill in your API keys:
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
+   
+   Required API keys:
+   - `OPENTRIPMAP_API_KEY` - Get from https://opentripmap.io/docs
+   - `GROQ_API_KEY` - Get from https://console.groq.com/
+   - `NOMINATIM_EMAIL` - Your email (optional but recommended)
+   
+   Optional API keys:
+   - `GOOGLE_PLACES_API_KEY` - For enhanced hotel ratings
+   - `OPENROUTESERVICE_API_KEY` - For detailed route planning
+   
+   Database configuration:
+   - `DB_BACKEND=sqlite` (default) or `mongo`
+   - For MongoDB: Set `MONGODB_URI`, `MONGO_DB`, `JWT_SECRET`
+   - For SQLite: No additional config needed
+2. Install dependencies:
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+3. Run backend locally:
+
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+4. Health check:
+Open `http://localhost:8000/health`.
+
+---
+
+### 3) Frontend Setup (React + Vite)
+
+Requirements: Node 18+
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`.
+
+In production, deploy the frontend to Firebase Hosting (free tier) or Vercel/Netlify.
+
+---
+
+### 4) How Python Scripts Work (High-level)
+
+- `backend/main.py`: FastAPI app, defines routes:
+  - `POST /api/plan-trip`: orchestrates geocoding (Nominatim), attractions (OpenTripMap), hotels and airports (Overpass), AI itinerary generation (Groq), and cost estimation. Saves result to SQLite.
+  - `GET /health`: simple health endpoint.
+- `backend/models/schemas.py`: Pydantic models for request/response, strong typing.
+- `backend/services/free_places_service.py`: Free stack provider:
+  - Geocode cities (Nominatim)
+  - Find attractions (OpenTripMap)
+  - Find hotels and airports (Overpass API)
+- `backend/services/ai_service.py`: Calls Groq (open model) to produce a day-by-day itinerary JSON given inputs and candidates.
+- `backend/utils/cost_estimator.py`: Heuristic flight/hotel/daily-spend estimator using distance and rough city price signals.
+- `backend/storage/sqlite_repository.py` and `backend/models/db_models.py`: Saves itineraries in SQLite as JSON blobs.
+
+You can open each file to see docstrings and comments that explain details inline.
+
+---
+
+### 5) Environment Variables
+
+Copy `.env.example` to `.env` and set:
+
+```
+OPENTRIPMAP_API_KEY=YOUR_OTM_API_KEY
+NOMINATIM_EMAIL=your@email
+GROQ_API_KEY=YOUR_GROQ_API_KEY
+SQLITE_PATH=./data.db
+DEFAULT_CURRENCY=INR
+```
+
+---
+
+### 6) Deployment
+
+Backend:
+- You can run on your own machine or deploy to a free-tier host that does not require a card (provider policies change; check current terms).
+- Dockerfile is included in `backend/`. Build and run with Docker if you prefer containers.
+
+Frontend (Firebase Hosting):
+1. In `frontend/`, run build:
+   ```bash
+   npm run build
+   ```
+2. Install Firebase CLI and initialize hosting:
+   ```bash
+   npm install -g firebase-tools
+   firebase login
+   firebase init hosting
+   # choose 'dist' as public directory (Vite default)
+   ```
+3. Deploy:
+   ```bash
+   firebase deploy --only hosting
+   ```
+
+---
+
+### 7) Notes and Limitations
+- Flight prices are estimated, not real-time. Add a 3rd-party API later if needed.
+- Free providers have rate limits:
+  - Nominatim and Overpass: be gentle, cache responses, include contact email, and avoid heavy load.
+  - OpenTripMap: respect your free plan’s limits.
+- Groq free tier has rate limits; keep prompts small and cache results if possible.
+
+---
+
+### 8) API Contract
+
+Request:
+```json
+POST /api/plan-trip
+{
+  "originCity": "New Delhi, IN",
+  "destinationCity": "Bangkok, TH",
+  "numDays": 5,
+  "numPeople": 2,
+  "budgetCurrency": "INR",
+  "budgetAmount": 120000
+}
+```
+
+Response (abridged):
+```json
+{
+  "itineraryId": "abc123",
+  "summary": "...",
+  "flights": {
+    "originAirport": "Indira Gandhi International Airport",
+    "destinationAirport": "Suvarnabhumi Airport",
+    "estimatedRoundTripPerPerson": 28000
+  },
+  "hotels": [{ "name": "...", "address": "..." }],
+  "dailyPlan": [{ "day": 1, "items": ["..."] }],
+  "estimatedTotals": {
+    "flights": 56000,
+    "hotels": 40000,
+    "activities": 10000,
+    "foodTransportMisc": 8000,
+    "grandTotal": 114000,
+    "currency": "INR"
+  }
+}
+```
+
+---
+
+### 9) Next Steps
+- Add authentication (e.g., Clerk, Supabase Auth) if you want user accounts and history.
+- Replace flight cost heuristic with a real flights API when available.
+- Add map visualizations on the frontend using Leaflet (free) with OSM tiles.
+
+
