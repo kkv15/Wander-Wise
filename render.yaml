@@ -1,0 +1,39 @@
+# Render configuration for WanderWise backend
+# Deploy at: https://dashboard.render.com
+
+services:
+  - type: web
+    name: wanderwise-backend
+    env: python
+    plan: free
+    region: oregon  # or singapore, frankfurt
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # Required - Set these in Render dashboard Environment tab
+      - key: OPENTRIPMAP_API_KEY
+        sync: false  # You'll set this manually in Render dashboard
+      - key: GROQ_API_KEY
+        sync: false
+      - key: NOMINATIM_EMAIL
+        sync: false
+      # Optional
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: OPENROUTESERVICE_API_KEY
+        sync: false
+      # Database config
+      - key: DB_BACKEND
+        value: sqlite  # Use 'mongo' for MongoDB
+      - key: DEFAULT_CURRENCY
+        value: INR
+      # MongoDB (only if DB_BACKEND=mongo)
+      - key: MONGODB_URI
+        sync: false
+        required: false
+      - key: MONGO_DB
+        value: wanderwise
+        required: false
+      - key: JWT_SECRET
+        sync: false
+        required: false

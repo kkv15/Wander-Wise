@@ -124,26 +124,34 @@ DEFAULT_CURRENCY=INR
 
 ### 6) Deployment
 
-Backend:
-- You can run on your own machine or deploy to a free-tier host that does not require a card (provider policies change; check current terms).
-- Dockerfile is included in `backend/`. Build and run with Docker if you prefer containers.
+#### Quick Deploy to Netlify (Frontend) + Render (Backend)
 
-Frontend (Firebase Hosting):
-1. In `frontend/`, run build:
-   ```bash
-   npm run build
-   ```
-2. Install Firebase CLI and initialize hosting:
-   ```bash
-   npm install -g firebase-tools
-   firebase login
-   firebase init hosting
-   # choose 'dist' as public directory (Vite default)
-   ```
-3. Deploy:
-   ```bash
-   firebase deploy --only hosting
-   ```
+**See detailed guide in [`NETLIFY_DEPLOYMENT.md`](NETLIFY_DEPLOYMENT.md)**
+
+**Quick Steps:**
+
+1. **Frontend (Netlify):**
+   - Push code to GitHub
+   - Connect to Netlify
+   - Build command: `cd frontend && npm install && npm run build`
+   - Publish directory: `frontend/dist`
+   - Set environment variable: `VITE_API_BASE` = your backend URL
+
+2. **Backend (Render - Free Tier):**
+   - Sign up at https://render.com
+   - Connect GitHub repository
+   - Create new Web Service
+   - Render will auto-detect `render.yaml`
+   - Add environment variables in Render dashboard
+   - Deploy!
+
+**Alternative Backend Hosting:**
+- **Railway** (Free tier with $5 credit/month)
+- **Fly.io** (Free tier available)
+- **Heroku** (No longer free, but paid options available)
+
+**Docker Deployment:**
+- Dockerfile is included in `backend/`. Build and run with Docker if you prefer containers.
 
 ---
 

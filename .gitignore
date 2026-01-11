@@ -93,3 +93,8 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/*.db
 backend/data.db
+
+# Deployment configs (keep these)
+# !netlify.toml
+# !render.yaml
+# !NETLIFY_DEPLOYMENT.md
