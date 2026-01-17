@@ -186,7 +186,7 @@ export default function App() {
               <section id="explore" className="card" style={{ marginTop: 48, padding: 32 }}>
                 <h2 style={{ 
                   margin: 0, 
-                  fontSize: 28, 
+                  fontSize: 'clamp(22px, 4vw, 28px)', 
                   fontWeight: 700,
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   WebkitBackgroundClip: 'text',
@@ -195,12 +195,18 @@ export default function App() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: 12,
-                  marginBottom: 8
+                  marginBottom: 8,
+                  flexWrap: 'wrap'
                 }}>
                   <span>🌟</span>
                   Discover Itineraries
                 </h2>
-                <p className="muted" style={{ marginTop: 12, marginBottom: 24, fontSize: 16, lineHeight: 1.6 }}>
+                <p className="muted" style={{ 
+                  marginTop: 12, 
+                  marginBottom: 24, 
+                  fontSize: 'clamp(14px, 2vw, 16px)', 
+                  lineHeight: 1.6 
+                }}>
                   Hand-picked travel ideas to get you started. Click any trip to pre-fill the planner.
                 </p>
                 <div className="grid grid-2" style={{ gap: 24 }}>

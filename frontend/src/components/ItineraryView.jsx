@@ -79,7 +79,7 @@ export default function ItineraryView({ data }) {
       }}>
         <h2 style={{ 
           margin: 0, 
-          fontSize: 32, 
+          fontSize: 'clamp(24px, 4vw, 32px)', 
           fontWeight: 700, 
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
           WebkitBackgroundClip: 'text', 
@@ -88,17 +88,18 @@ export default function ItineraryView({ data }) {
           display: 'flex',
           alignItems: 'center',
           gap: 12,
-          marginBottom: 12
+          marginBottom: 12,
+          flexWrap: 'wrap'
         }}>
           <span>✈️</span>
           Suggested Itinerary
         </h2>
         <p style={{ 
-          fontSize: 16, 
+          fontSize: 'clamp(14px, 2vw, 16px)', 
           color: '#64748b', 
           lineHeight: 1.6, 
           margin: 0,
-          maxWidth: '90%'
+          maxWidth: '100%'
         }}>
           {data.summary}
         </p>

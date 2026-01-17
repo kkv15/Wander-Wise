@@ -101,11 +101,18 @@ export default function TripsPage() {
   return (
     <main className="container">
       <div style={{ marginTop: 32 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-          <div>
+        <div style={{ 
+          display: 'flex', 
+          flexWrap: 'wrap',
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          gap: 16,
+          marginBottom: 32 
+        }}>
+          <div style={{ flex: '1 1 auto', minWidth: '200px' }}>
             <h1 style={{ 
               margin: 0, 
-              fontSize: 36, 
+              fontSize: 'clamp(28px, 5vw, 36px)', 
               fontWeight: 700, 
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
               WebkitBackgroundClip: 'text', 
@@ -113,16 +120,23 @@ export default function TripsPage() {
               backgroundClip: 'text',
               display: 'flex',
               alignItems: 'center',
-              gap: 12
+              gap: 12,
+              flexWrap: 'wrap'
             }}>
               <span>🗺️</span>
               My Trips
             </h1>
-            <p className="muted" style={{ marginTop: 8, fontSize: 16 }}>
+            <p className="muted" style={{ marginTop: 8, fontSize: 'clamp(14px, 2vw, 16px)' }}>
               View and manage all your saved travel itineraries
             </p>
           </div>
-          <Link to="/plan" className="btn-primary">
+          <Link 
+            to="/plan" 
+            className="btn-primary"
+            style={{ 
+              flex: '0 0 auto'
+            }}
+          >
             + Plan New Trip
           </Link>
         </div>
