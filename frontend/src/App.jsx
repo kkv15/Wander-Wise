@@ -142,13 +142,13 @@ export default function App() {
           )}
           
           {!auth?.user ? (
-            <Link to="/signin" className="btn-secondary" style={{ marginLeft: 16 }}>Sign In</Link>
+            <Link to="/signin" className="btn-secondary">Sign In</Link>
           ) : (
             <>
               {location.pathname !== '/trips' && (
-                <Link to="/trips" className="btn-secondary" style={{ marginLeft: 16 }}>My Trips</Link>
+                <Link to="/trips" className="btn-secondary">My Trips</Link>
               )}
-              <button className="btn-secondary" style={{ marginLeft: 8 }} onClick={() => { auth.signOut?.(); navigate('/'); }}>
+              <button className="btn-secondary" onClick={() => { auth.signOut?.(); navigate('/'); }}>
                 Sign Out
               </button>
             </>

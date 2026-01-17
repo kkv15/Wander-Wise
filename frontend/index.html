@@ -162,8 +162,13 @@
         background: linear-gradient(135deg, #f0f4ff 0%, #fef0ff 100%);
         padding: 4px;
       }
+      .nav-links { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        flex-wrap: wrap;
+      }
       .nav-links a { 
-        margin-left: 20px; 
         text-decoration: none; 
         color: #475569; 
         font-weight: 600;
@@ -171,6 +176,10 @@
       }
       .nav-links a:hover {
         color: #667eea;
+      }
+      .nav-links .btn-secondary,
+      .nav-links button.btn-secondary {
+        margin-left: 0 !important;
       }
       .split-hero { 
         display: grid; 
@@ -199,6 +208,8 @@
       .cta-buttons { 
         display: flex; 
         gap: 12px; 
+        align-items: center;
+        flex-wrap: wrap;
       }
       .btn-primary { 
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -788,11 +799,26 @@
       /* Mobile (320px - 479px) */
       @media (max-width: 479px) {
         .container { padding: 16px; }
-        .site-header { padding: 0 12px; height: 56px; }
+        .site-header { padding: 0 12px; height: auto; min-height: 56px; }
         .site-logo { font-size: 18px; gap: 8px; }
         .site-logo img { width: 32px; height: 32px; }
-        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-links a { margin-left: 0; font-size: 14px; padding: 8px 12px; }
+        .nav-links { 
+          display: flex; 
+          gap: 8px; 
+          flex-wrap: wrap; 
+          align-items: center;
+          justify-content: flex-end;
+          width: 100%;
+        }
+        .nav-links a, .nav-links .btn-secondary, .nav-links button { 
+          margin-left: 0 !important; 
+          margin-right: 0 !important;
+          font-size: 13px; 
+          padding: 8px 12px; 
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
         .btn-secondary { padding: 10px 16px; font-size: 14px; }
         .split-hero { padding: 24px 16px; gap: 24px; }
         .split-hero-text h1 { font-size: 28px; line-height: 1.2; }
@@ -891,17 +917,33 @@
         .site-logo { font-size: 16px; }
         .nav-links { 
           display: flex; 
-          gap: 6px; 
+          gap: 8px; 
           flex-wrap: wrap; 
           align-items: center;
           width: 100%;
           justify-content: flex-end;
+          margin-left: 0;
         }
         .nav-links a, .nav-links .btn-secondary, .nav-links button { 
           font-size: 13px; 
           padding: 8px 12px; 
-          margin-left: 0; 
+          margin-left: 0 !important; 
+          margin-right: 0 !important;
           white-space: nowrap;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .cta-buttons {
+          width: 100%;
+          gap: 10px;
+        }
+        .cta-buttons .btn-primary,
+        .cta-buttons .btn-secondary {
+          flex: 1;
+          min-width: 0;
+          text-align: center;
+          justify-content: center;
         }
       }
       
